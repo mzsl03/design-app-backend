@@ -45,12 +45,14 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean verify
+        working-directory: ./backend
 
       - name: Upload Jacoco coverage report
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
-          path: target/site/jacoco/
+          path: backend/target/site/jacoco/
 
       - name: Build Docker image
         run: docker build -t design-backend .
+        working-directory: ./backend
