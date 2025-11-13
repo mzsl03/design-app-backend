@@ -1,0 +1,56 @@
+name: workflow.yml
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: designdb
+          POSTGRES_USER: designuser
+          POSTGRES_PASSWORD: designpass
+        options: >-
+          --health-cmd="pg_isready -U designuser -d designdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Wait for PostgreSQL
+        run: |
+          echo "Waiting for postgres..."
+          for i in {1..20}; do
+            PGPASSWORD=designpass psql -h localhost -U designuser -d designdb -c "SELECT 1" && break
+            sleep 3
+          done
+
+      - name: Build with Maven
+        run: mvn -B clean verify
+
+      - name: Upload Jacoco coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+
+      - name: Build Docker image
+        run: docker build -t design-backend .
