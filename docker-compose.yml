@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: design_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: designdb
+      POSTGRES_USER: designuser
+      POSTGRES_PASSWORD: designpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: design_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/designdb
+      SPRING_DATASOURCE_USERNAME: designuser
+      SPRING_DATASOURCE_PASSWORD: designpass
+
+volumes:
+  postgres_data:
