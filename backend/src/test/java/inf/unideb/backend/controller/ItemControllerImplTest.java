@@ -1,6 +1,7 @@
 package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.Item;
+import inf.unideb.backend.model.User;
 import inf.unideb.backend.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,8 @@ class ItemControllerImplTest {
 
     @Test
     void testGetAll() {
-        Item item1 = new Item(UUID.randomUUID(), "A", "desc", "img", "tag");
-        Item item2 = new Item(UUID.randomUUID(), "B", "desc2", "img2", "tag2");
+        Item item1 = new Item(UUID.randomUUID(), "A", "desc", "img", "tag", new User(UUID.randomUUID(), "username1", "email1"));
+        Item item2 = new Item(UUID.randomUUID(), "B", "desc2", "img2", "tag2", new User(UUID.randomUUID(), "username2", "email2"));
 
         when(repository.findAll()).thenReturn(Arrays.asList(item1, item2));
 
@@ -40,7 +41,8 @@ class ItemControllerImplTest {
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-        Item item = new Item(id, "A", "desc", "img", "tag");
+        UUID id2 = UUID.randomUUID();
+        Item item = new Item(id, "A", "desc", "img", "tag", new User(id2, "username", "email"));
 
         when(repository.findById(id)).thenReturn(Optional.of(item));
 
@@ -52,9 +54,10 @@ class ItemControllerImplTest {
 
     @Test
     void testCreate() {
-        Item item = new Item(null, "A", "desc", "img", "tag");
+        User user = new User(UUID.randomUUID(), "username", "email");
+        Item item = new Item(null, "A", "desc", "img", "tag", user);
 
-        Item saved = new Item(UUID.randomUUID(), "A", "desc", "img", "tag");
+        Item saved = new Item(UUID.randomUUID(), "A", "desc", "img", "tag", user);
 
         when(repository.save(ArgumentMatchers.any(Item.class))).thenReturn(saved);
 
@@ -67,10 +70,11 @@ class ItemControllerImplTest {
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
 
-        Item oldItem = new Item(id, "Old", "OldD", "OldImg", "OldTag");
-        Item updatedItem = new Item(null, "New", "NewD", "NewImg", "NewTag");
-        Item saved = new Item(id, "New", "NewD", "NewImg", "NewTag");
+        Item oldItem = new Item(id, "Old", "OldD", "OldImg", "OldTag", new User(id2, "OldName", "OldEmail"));
+        Item updatedItem = new Item(null, "New", "NewD", "NewImg", "NewTag", new User(id2, "NewName", "NewEmail"));
+        Item saved = new Item(id, "New", "NewD", "NewImg", "NewTag",  new User(id2, "NewName", "NewEmail"));
 
         when(repository.findById(id)).thenReturn(Optional.of(oldItem));
         when(repository.save(any(Item.class))).thenReturn(saved);

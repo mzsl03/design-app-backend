@@ -21,4 +21,6 @@ public class Item {
     @Column(length = 2000)
     private String description;
     private String tags;
+    @ManyToOne
+    private User user;
 }
