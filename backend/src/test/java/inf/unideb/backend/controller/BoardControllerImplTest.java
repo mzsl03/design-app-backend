@@ -4,6 +4,7 @@ import inf.unideb.backend.model.Board;
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.BoardRepository;
 import inf.unideb.backend.repository.ItemRepository;
+import inf.unideb.backend.service.BoardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +20,13 @@ class BoardControllerImplTest {
 
     private BoardRepository boardRepository;
     private ItemRepository itemRepository;
-    private BoardControllerImpl controller;
+    private BoardService boardService;
 
     @BeforeEach
     void setUp() {
         boardRepository = mock(BoardRepository.class);
         itemRepository = mock(ItemRepository.class);
-        controller = new BoardControllerImpl(boardRepository, itemRepository);
+        boardService = new BoardService(boardRepository, itemRepository);
     }
 
     @Test
@@ -35,7 +36,7 @@ class BoardControllerImplTest {
 
         when(boardRepository.findAll()).thenReturn(Arrays.asList(b1, b2));
 
-        var result = controller.getAll();
+        var result = boardService.getAll();
 
         assertEquals(2, result.size());
         verify(boardRepository).findAll();
@@ -49,7 +50,7 @@ class BoardControllerImplTest {
 
         when(boardRepository.findById(id)).thenReturn(Optional.of(board));
 
-        var result = controller.getOne(id);
+        var result = boardService.getOne(id);
 
         assertEquals("Designs", result.getName());
         verify(boardRepository).findById(id);
@@ -62,7 +63,7 @@ class BoardControllerImplTest {
 
         when(boardRepository.save(any(Board.class))).thenReturn(saved);
 
-        var result = controller.create(board);
+        var result = boardService.create(board);
 
         assertNotNull(result.getId());
         verify(boardRepository).save(board);
@@ -79,7 +80,7 @@ class BoardControllerImplTest {
         when(boardRepository.findById(id)).thenReturn(Optional.of(oldBoard));
         when(boardRepository.save(any(Board.class))).thenReturn(saved);
 
-        var result = controller.update(id, update);
+        var result = boardService.update(id, update);
 
         assertEquals("New", result.getName());
         verify(boardRepository).save(any(Board.class));
@@ -91,7 +92,7 @@ class BoardControllerImplTest {
 
         doNothing().when(boardRepository).deleteById(id);
 
-        controller.delete(id);
+        boardService.delete(id);
 
         verify(boardRepository).deleteById(id);
     }
@@ -109,7 +110,7 @@ class BoardControllerImplTest {
         when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
         when(boardRepository.save(board)).thenReturn(board);
 
-        var result = controller.addItem(boardId, itemId);
+        var result = boardService.addItem(boardId, itemId);
 
         assertEquals(1, result.getItems().size());
         assertTrue(result.getItems().contains(item));
