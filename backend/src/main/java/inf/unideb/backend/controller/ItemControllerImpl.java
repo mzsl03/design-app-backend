@@ -1,7 +1,6 @@
 package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.Item;
-import inf.unideb.backend.repository.ItemRepository;
 import inf.unideb.backend.service.ItemService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,8 +13,8 @@ public class ItemControllerImpl implements ItemController {
 
     private final ItemService itemService;
 
-    public ItemControllerImpl(ItemService itemService) {
-        this.itemService = itemService;
+    public ItemControllerImpl(ItemService service) {
+        this.itemService = service;
     }
 
     @Override

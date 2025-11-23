@@ -1,9 +1,6 @@
 package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.Board;
-import inf.unideb.backend.model.Item;
-import inf.unideb.backend.repository.BoardRepository;
-import inf.unideb.backend.repository.ItemRepository;
 import inf.unideb.backend.service.BoardService;
 import inf.unideb.backend.service.ItemService;
 import org.springframework.web.bind.annotation.RestController;

@@ -14,8 +14,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository repository) {
+        this.userRepository = repository;
     }
 
     public List<User> getAll() {
@@ -42,5 +42,5 @@ public class UserService {
     public void delete(UUID id) {
         userRepository.deleteById(id);
     }
-    
+
 }
