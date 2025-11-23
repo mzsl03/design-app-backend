@@ -1,6 +1,7 @@
 package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.Board;
+import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.BoardRepository;
 import inf.unideb.backend.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,4 +95,29 @@ class BoardControllerImplTest {
 
         verify(boardRepository).deleteById(id);
     }
+
+    @Test
+    void testAddItem() {
+        UUID boardId = UUID.randomUUID();
+        UUID itemId = UUID.randomUUID();
+
+        Board board = new Board(boardId, "TestBoard", null, new ArrayList<>());
+
+        Item item = new Item(itemId, "Item", null, null, null, null);
+
+        when(boardRepository.findById(boardId)).thenReturn(Optional.of(board));
+        when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+        when(boardRepository.save(board)).thenReturn(board);
+
+        var result = controller.addItem(boardId, itemId);
+
+        assertEquals(1, result.getItems().size());
+        assertTrue(result.getItems().contains(item));
+
+        verify(boardRepository).findById(boardId);
+        verify(itemRepository).findById(itemId);
+
+        verify(boardRepository).save(board);
+    }
+
 }
