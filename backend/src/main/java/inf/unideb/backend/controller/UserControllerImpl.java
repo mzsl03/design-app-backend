@@ -2,7 +2,8 @@ package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.User;
 import inf.unideb.backend.repository.UserRepository;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -12,8 +13,8 @@ public class UserControllerImpl implements UserController {
 
     private final UserRepository repo;
 
-    public UserControllerImpl(UserRepository repo) {
-        this.repo = repo;
+    public UserControllerImpl(UserRepository ur) {
+        this.repo = ur;
     }
 
     @Override

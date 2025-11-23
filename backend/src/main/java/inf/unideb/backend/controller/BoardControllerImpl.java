@@ -15,9 +15,10 @@ public class BoardControllerImpl implements BoardController {
     private final BoardRepository boardRepository;
     private final ItemRepository itemRepository;
 
-    public BoardControllerImpl(BoardRepository boardRepository, ItemRepository itemRepository) {
-        this.boardRepository = boardRepository;
-        this.itemRepository = itemRepository;
+    public BoardControllerImpl(BoardRepository br,
+                               ItemRepository ir) {
+        this.boardRepository = br;
+        this.itemRepository = ir;
     }
 
     @Override
@@ -27,7 +28,9 @@ public class BoardControllerImpl implements BoardController {
 
     @Override
     public Board getOne(UUID id) {
-        return boardRepository.findById(id).orElseThrow();
+        return boardRepository
+                .findById(id)
+                .orElseThrow();
     }
 
     @Override
@@ -37,7 +40,8 @@ public class BoardControllerImpl implements BoardController {
 
     @Override
     public Board update(UUID id, Board board) {
-        Board existing = boardRepository.findById(id).orElseThrow();
+        Board existing = boardRepository
+                .findById(id).orElseThrow();
 
         existing.setName(board.getName());
         existing.setUser(board.getUser());
@@ -52,10 +56,15 @@ public class BoardControllerImpl implements BoardController {
 
     @Override
     public Board addItem(UUID boardId, UUID itemId) {
-        Board board = boardRepository.findById(boardId).orElseThrow();
-        Item item = itemRepository.findById(itemId).orElseThrow();
+        Board board = boardRepository
+                .findById(boardId)
+                .orElseThrow();
+        Item item = itemRepository
+                .findById(itemId)
+                .orElseThrow();
 
         board.getItems().add(item);
-        return boardRepository.save(board);
+        return boardRepository
+                .save(board);
     }
 }
