@@ -4,6 +4,8 @@ import inf.unideb.backend.model.Board;
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.BoardRepository;
 import inf.unideb.backend.repository.ItemRepository;
+import inf.unideb.backend.service.BoardService;
+import inf.unideb.backend.service.ItemService;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -12,59 +14,43 @@ import java.util.UUID;
 @RestController
 public class BoardControllerImpl implements BoardController {
 
-    private final BoardRepository boardRepository;
-    private final ItemRepository itemRepository;
+    private final BoardService boardService;
+    private final ItemService itemService;
 
-    public BoardControllerImpl(BoardRepository br,
-                               ItemRepository ir) {
-        this.boardRepository = br;
-        this.itemRepository = ir;
+    public BoardControllerImpl(BoardService br,
+                               ItemService ir) {
+        this.boardService = br;
+        this.itemService = ir;
     }
 
     @Override
     public List<Board> getAll() {
-        return boardRepository.findAll();
+        return boardService.getAll();
     }
 
     @Override
     public Board getOne(UUID id) {
-        return boardRepository
-                .findById(id)
-                .orElseThrow();
+        return boardService.getOne(id);
     }
 
     @Override
     public Board create(Board board) {
-        return boardRepository.save(board);
+        return boardService.create(board);
     }
 
     @Override
     public Board update(UUID id, Board board) {
-        Board existing = boardRepository
-                .findById(id).orElseThrow();
-
-        existing.setName(board.getName());
-        existing.setUser(board.getUser());
-
-        return boardRepository.save(existing);
+        return boardService.update(id, board);
     }
 
     @Override
     public void delete(UUID id) {
-        boardRepository.deleteById(id);
+        boardService.delete(id);
     }
 
     @Override
     public Board addItem(UUID boardId, UUID itemId) {
-        Board board = boardRepository
-                .findById(boardId)
-                .orElseThrow();
-        Item item = itemRepository
-                .findById(itemId)
-                .orElseThrow();
+        return boardService.addItem(boardId, itemId);
 
-        board.getItems().add(item);
-        return boardRepository
-                .save(board);
     }
 }

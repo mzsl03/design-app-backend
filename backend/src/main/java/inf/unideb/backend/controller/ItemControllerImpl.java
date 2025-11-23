@@ -2,6 +2,7 @@ package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.ItemRepository;
+import inf.unideb.backend.service.ItemService;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -11,41 +12,34 @@ import java.util.UUID;
 @RestController
 public class ItemControllerImpl implements ItemController {
 
-    private final ItemRepository repo;
+    private final ItemService itemService;
 
-    public ItemControllerImpl(ItemRepository ir) {
-        this.repo = ir;
+    public ItemControllerImpl(ItemService itemService) {
+        this.itemService = itemService;
     }
 
     @Override
     public List<Item> getAll() {
-        return repo.findAll();
+        return itemService.getAll();
     }
 
     @Override
     public Item getOne(UUID id) {
-        return repo.findById(id).orElseThrow();
+        return itemService.getOne(id);
     }
 
     @Override
     public Item create(Item item) {
-        return repo.save(item);
+        return itemService.create(item);
     }
 
     @Override
     public Item update(UUID id, Item item) {
-        Item existing = repo.findById(id).orElseThrow();
-
-        existing.setTitle(item.getTitle());
-        existing.setImageUrl(item.getImageUrl());
-        existing.setDescription(item.getDescription());
-        existing.setTags(item.getTags());
-
-        return repo.save(existing);
+        return itemService.update(id, item);
     }
 
     @Override
     public void delete(UUID id) {
-        repo.deleteById(id);
+        itemService.delete(id);
     }
 }

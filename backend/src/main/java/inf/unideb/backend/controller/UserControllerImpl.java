@@ -1,7 +1,8 @@
 package inf.unideb.backend.controller;
 
 import inf.unideb.backend.model.User;
-import inf.unideb.backend.repository.UserRepository;
+import inf.unideb.backend.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -11,39 +12,35 @@ import java.util.UUID;
 @RestController
 public class UserControllerImpl implements UserController {
 
-    private final UserRepository repo;
+    private final UserService userService;
 
-    public UserControllerImpl(UserRepository ur) {
-        this.repo = ur;
+    @Autowired
+    public UserControllerImpl(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public List<User> getAll() {
-        return repo.findAll();
+        return userService.getAll();
     }
 
     @Override
     public User getOne(UUID id) {
-        return repo.findById(id).orElseThrow();
+        return userService.getOne(id);
     }
 
     @Override
     public User create(User user) {
-        return repo.save(user);
+        return userService.create(user);
     }
 
     @Override
     public User update(UUID id, User user) {
-        User existing = repo.findById(id).orElseThrow();
-
-        existing.setUsername(user.getUsername());
-        existing.setEmail(user.getEmail());
-
-        return repo.save(existing);
+        return userService.update(id, user);
     }
 
     @Override
     public void delete(UUID id) {
-        repo.deleteById(id);
+        userService.delete(id);
     }
 }
