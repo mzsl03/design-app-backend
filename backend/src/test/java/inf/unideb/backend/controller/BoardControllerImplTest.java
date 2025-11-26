@@ -1,5 +1,7 @@
 package inf.unideb.backend.controller;
 
+import inf.unideb.backend.dto.CreateBoardDTO;
+import inf.unideb.backend.dto.UpdateBoardDTO;
 import inf.unideb.backend.model.Board;
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.BoardRepository;
@@ -39,34 +41,40 @@ class BoardControllerImplTest {
         var result = boardService.getAll();
 
         assertEquals(2, result.size());
+
+        assertEquals("Designs", result.get(0).name());
+        assertEquals("Clothes", result.get(1).name());
+
         verify(boardRepository).findAll();
     }
 
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-
         Board board = new Board(id, "Designs", null, new ArrayList<>());
 
         when(boardRepository.findById(id)).thenReturn(Optional.of(board));
 
         var result = boardService.getOne(id);
 
-        assertEquals("Designs", result.getName());
+
+        assertEquals("Designs", result.name());
         verify(boardRepository).findById(id);
     }
 
     @Test
     void testCreate() {
-        Board board = new Board(null, "Test", null, new ArrayList<>());
+        CreateBoardDTO dto = new CreateBoardDTO("Test");
+
         Board saved = new Board(UUID.randomUUID(), "Test", null, new ArrayList<>());
 
         when(boardRepository.save(any(Board.class))).thenReturn(saved);
 
-        var result = boardService.create(board);
+        var result = boardService.create(dto);
 
-        assertNotNull(result.getId());
-        verify(boardRepository).save(board);
+
+        assertEquals("Test", result.name());
+        verify(boardRepository).save(any(Board.class));
     }
 
     @Test
@@ -74,15 +82,16 @@ class BoardControllerImplTest {
         UUID id = UUID.randomUUID();
 
         Board oldBoard = new Board(id, "Old", null, new ArrayList<>());
-        Board update = new Board(null, "New", null, new ArrayList<>());
+        UpdateBoardDTO dto = new UpdateBoardDTO("New");
         Board saved = new Board(id, "New", null, new ArrayList<>());
 
         when(boardRepository.findById(id)).thenReturn(Optional.of(oldBoard));
         when(boardRepository.save(any(Board.class))).thenReturn(saved);
 
-        var result = boardService.update(id, update);
+        var result = boardService.update(id, dto);
 
-        assertEquals("New", result.getName());
+
+        assertEquals("New", result.name());
         verify(boardRepository).save(any(Board.class));
     }
 
@@ -103,7 +112,6 @@ class BoardControllerImplTest {
         UUID itemId = UUID.randomUUID();
 
         Board board = new Board(boardId, "TestBoard", null, new ArrayList<>());
-
         Item item = new Item(itemId, "Item", null, null, null, null);
 
         when(boardRepository.findById(boardId)).thenReturn(Optional.of(board));
@@ -112,13 +120,12 @@ class BoardControllerImplTest {
 
         var result = boardService.addItem(boardId, itemId);
 
-        assertEquals(1, result.getItems().size());
-        assertTrue(result.getItems().contains(item));
+
+        assertEquals(1, result.items().size());
+        assertEquals("Item", result.items().get(0).title());
 
         verify(boardRepository).findById(boardId);
         verify(itemRepository).findById(itemId);
-
         verify(boardRepository).save(board);
     }
-
 }

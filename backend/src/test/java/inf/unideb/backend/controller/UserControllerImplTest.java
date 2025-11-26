@@ -1,14 +1,14 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.User;
-import inf.unideb.backend.repository.UserRepository;
+import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.UpdateUserDTO;
+import inf.unideb.backend.dto.UserDTO;
+
 import inf.unideb.backend.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,8 +27,8 @@ class UserControllerImplTest {
 
     @Test
     void testGetAll() {
-        User u1 = new User(UUID.randomUUID(), "user1", "email1");
-        User u2 = new User(UUID.randomUUID(), "user2", "email2");
+        UserDTO u1 = new UserDTO("user1");
+        UserDTO u2 = new UserDTO("user2");
 
         when(userService.getAll()).thenReturn(Arrays.asList(u1, u2));
 
@@ -41,41 +41,43 @@ class UserControllerImplTest {
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "user", "email");
+
+        UserDTO user = new UserDTO("user");
 
         when(userService.getOne(id)).thenReturn(user);
 
         var result = controller.getOne(id);
 
-        assertEquals("user", result.getUsername());
+        assertEquals("user", result.username());
         verify(userService).getOne(id);
     }
 
     @Test
     void testCreate() {
-        User newUser = new User(null, "user", "email");
-        User savedUser = new User(UUID.randomUUID(), "user", "email");
+        CreateUserDTO dto = new CreateUserDTO("user", "email");
+        UserDTO saved = new UserDTO("user");
 
-        when(userService.create(any(User.class))).thenReturn(savedUser);
+        when(userService.create(any(CreateUserDTO.class))).thenReturn(saved);
 
-        var result = controller.create(newUser);
+        var result = controller.create(dto);
 
-        assertNotNull(result.getId());
-        verify(userService).create(newUser);
+        assertEquals("user", result.username());
+        verify(userService).create(any(CreateUserDTO.class));
     }
 
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
-        User updated = new User(null, "new", "new@mail.com");
-        User saved = new User(id, "new", "new@mail.com");
 
-        when(userService.update(eq(id), any(User.class))).thenReturn(saved);
+        UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail.com");
+        UserDTO saved = new UserDTO("new");
 
-        var result = controller.update(id, updated);
+        when(userService.update(eq(id), any(UpdateUserDTO.class))).thenReturn(saved);
 
-        assertEquals("new", result.getUsername());
-        verify(userService).update(eq(id), any(User.class));
+        var result = controller.update(id, dto);
+
+        assertEquals("new", result.username());
+        verify(userService).update(eq(id), any(UpdateUserDTO.class));
     }
 
     @Test

@@ -1,11 +1,13 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.Item;
-import inf.unideb.backend.model.User;
+import inf.unideb.backend.dto.CreateItemDTO;
+import inf.unideb.backend.dto.ItemDTO;
+import inf.unideb.backend.dto.UpdateItemDTO;
+import inf.unideb.backend.dto.UserDTO;
 import inf.unideb.backend.service.ItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
+
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -26,8 +28,8 @@ class ItemControllerImplTest {
 
     @Test
     void testGetAll() {
-        Item item1 = new Item(UUID.randomUUID(), "A", "desc", "img", "tag", new User(UUID.randomUUID(), "username1", "email1"));
-        Item item2 = new Item(UUID.randomUUID(), "B", "desc2", "img2", "tag2", new User(UUID.randomUUID(), "username2", "email2"));
+        ItemDTO item1 = new ItemDTO("A", "img", "desc", "tag", new UserDTO("username1"));
+        ItemDTO item2 = new ItemDTO("B", "img2", "desc2", "tag2", new UserDTO("username2"));
 
         when(itemService.getAll()).thenReturn(Arrays.asList(item1, item2));
 
@@ -40,47 +42,43 @@ class ItemControllerImplTest {
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        Item item = new Item(id, "A", "desc", "img", "tag", new User(id2, "username", "email"));
+
+        ItemDTO item = new ItemDTO("A", "img", "desc", "tag", new UserDTO("username"));
 
         when(itemService.getOne(id)).thenReturn(item);
 
         var result = controller.getOne(id);
 
-        assertEquals(id, result.getId());
+        assertEquals("A", result.title());
         verify(itemService).getOne(id);
     }
 
     @Test
     void testCreate() {
-        User user = new User(UUID.randomUUID(), "username", "email");
-        Item item = new Item(null, "A", "desc", "img", "tag", user);
+        CreateItemDTO dto = new CreateItemDTO("A", "img", "desc", "tag");
+        ItemDTO saved = new ItemDTO("A", "img", "desc", "tag", new UserDTO("username"));
 
-        Item saved = new Item(UUID.randomUUID(), "A", "desc", "img", "tag", user);
+        when(itemService.create(any(CreateItemDTO.class))).thenReturn(saved);
 
-        when(itemService.create(ArgumentMatchers.any(Item.class))).thenReturn(saved);
+        var result = controller.create(dto);
 
-        var result = controller.create(item);
-
-        assertNotNull(result.getId());
-        verify(itemService).create(item);
+        assertEquals("A", result.title());
+        verify(itemService).create(any(CreateItemDTO.class));
     }
 
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
 
-        Item updatedItem = new Item(null, "New", "NewD", "NewImg", "NewTag",
-                new User(UUID.randomUUID(), "NewName", "NewEmail"));
-        Item saved = new Item(id, "New", "NewD", "NewImg", "NewTag",
-                new User(UUID.randomUUID(), "NewName", "NewEmail"));
+        UpdateItemDTO dto = new UpdateItemDTO("New", "NewImg", "NewDesc", "NewTag");
+        ItemDTO saved = new ItemDTO("New", "NewImg", "NewDesc", "NewTag", new UserDTO("user"));
 
-        when(itemService.update(eq(id), any(Item.class))).thenReturn(saved);
+        when(itemService.update(eq(id), any(UpdateItemDTO.class))).thenReturn(saved);
 
-        var result = controller.update(id, updatedItem);
+        var result = controller.update(id, dto);
 
-        assertEquals("New", result.getTitle());
-        verify(itemService).update(eq(id), any(Item.class));
+        assertEquals("New", result.title());
+        verify(itemService).update(eq(id), any(UpdateItemDTO.class));
     }
 
     @Test
