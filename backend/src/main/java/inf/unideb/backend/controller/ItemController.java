@@ -1,6 +1,8 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.Item;
+import inf.unideb.backend.dto.CreateItemDTO;
+import inf.unideb.backend.dto.ItemDTO;
+import inf.unideb.backend.dto.UpdateItemDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,16 +16,16 @@ import java.util.UUID;
 public interface ItemController {
 
     @GetMapping("/api/items")
-    List<Item> getAll();
+    List<ItemDTO> getAll();
 
     @GetMapping("/api/items/{id}")
-    Item getOne(@PathVariable UUID id);
+    ItemDTO getOne(@PathVariable UUID id);
 
     @PostMapping("/api/items")
-    Item create(@RequestBody Item item);
+    ItemDTO create(@RequestBody CreateItemDTO item);
 
     @PutMapping("/api/items/{id}")
-    Item update(@PathVariable UUID id, @RequestBody Item item);
+    ItemDTO update(@PathVariable UUID id, @RequestBody UpdateItemDTO item);
 
     @DeleteMapping("/api/items/{id}")
     void delete(@PathVariable UUID id);

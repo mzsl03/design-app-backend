@@ -1,6 +1,8 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.Board;
+import inf.unideb.backend.dto.BoardDTO;
+import inf.unideb.backend.dto.CreateBoardDTO;
+import inf.unideb.backend.dto.UpdateBoardDTO;
 import inf.unideb.backend.service.BoardService;
 import inf.unideb.backend.service.ItemService;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,22 +23,22 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
-    public List<Board> getAll() {
+    public List<BoardDTO> getAll() {
         return boardService.getAll();
     }
 
     @Override
-    public Board getOne(UUID id) {
+    public BoardDTO getOne(UUID id) {
         return boardService.getOne(id);
     }
 
     @Override
-    public Board create(Board board) {
+    public BoardDTO create(CreateBoardDTO board) {
         return boardService.create(board);
     }
 
     @Override
-    public Board update(UUID id, Board board) {
+    public BoardDTO update(UUID id, UpdateBoardDTO board) {
         return boardService.update(id, board);
     }
 
@@ -46,7 +48,7 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
-    public Board addItem(UUID boardId, UUID itemId) {
+    public BoardDTO addItem(UUID boardId, UUID itemId) {
         return boardService.addItem(boardId, itemId);
 
     }

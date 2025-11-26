@@ -1,6 +1,8 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.Item;
+import inf.unideb.backend.dto.CreateItemDTO;
+import inf.unideb.backend.dto.ItemDTO;
+import inf.unideb.backend.dto.UpdateItemDTO;
 import inf.unideb.backend.service.ItemService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,22 +20,22 @@ public class ItemControllerImpl implements ItemController {
     }
 
     @Override
-    public List<Item> getAll() {
+    public List<ItemDTO> getAll() {
         return itemService.getAll();
     }
 
     @Override
-    public Item getOne(UUID id) {
+    public ItemDTO getOne(UUID id) {
         return itemService.getOne(id);
     }
 
     @Override
-    public Item create(Item item) {
+    public ItemDTO create(CreateItemDTO item) {
         return itemService.create(item);
     }
 
     @Override
-    public Item update(UUID id, Item item) {
+    public ItemDTO update(UUID id, UpdateItemDTO item) {
         return itemService.update(id, item);
     }
 

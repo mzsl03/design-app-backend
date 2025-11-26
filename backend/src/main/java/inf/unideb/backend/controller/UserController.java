@@ -1,6 +1,8 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.User;
+import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.UpdateUserDTO;
+import inf.unideb.backend.dto.UserDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,17 +16,18 @@ import java.util.UUID;
 public interface UserController {
 
     @GetMapping("/api/users")
-    List<User> getAll();
+    List<UserDTO> getAll();
 
     @GetMapping("/api/users/{id}")
-    User getOne(@PathVariable UUID id);
+    UserDTO getOne(@PathVariable UUID id);
 
     @PostMapping("/api/users")
-    User create(@RequestBody User user);
+    UserDTO create(@RequestBody CreateUserDTO user);
 
     @PutMapping("/api/users/{id}")
-    User update(@PathVariable UUID id, @RequestBody User user);
+    UserDTO update(@PathVariable UUID id, @RequestBody UpdateUserDTO user);
 
     @DeleteMapping("/api/users/{id}")
     void delete(@PathVariable UUID id);
+
 }

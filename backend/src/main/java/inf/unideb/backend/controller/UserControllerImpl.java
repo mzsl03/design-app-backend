@@ -1,6 +1,8 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.model.User;
+import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.UpdateUserDTO;
+import inf.unideb.backend.dto.UserDTO;
 import inf.unideb.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,22 +22,22 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<UserDTO> getAll() {
         return userService.getAll();
     }
 
     @Override
-    public User getOne(UUID id) {
+    public UserDTO getOne(UUID id) {
         return userService.getOne(id);
     }
 
     @Override
-    public User create(User user) {
+    public UserDTO create(CreateUserDTO user) {
         return userService.create(user);
     }
 
     @Override
-    public User update(UUID id, User user) {
+    public UserDTO update(UUID id, UpdateUserDTO user) {
         return userService.update(id, user);
     }
 
