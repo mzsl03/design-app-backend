@@ -1,5 +1,9 @@
 package inf.unideb.backend.service;
 
+import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.UpdateUserDTO;
+import inf.unideb.backend.dto.UserDTO;
+import inf.unideb.backend.mapper.UserMapper;
 import inf.unideb.backend.model.User;
 import inf.unideb.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +22,29 @@ public class UserService {
         this.userRepository = repository;
     }
 
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserDTO> getAll() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserMapper::toDTO)
+                .toList();
     }
 
-    public User getOne(UUID id) {
-        return userRepository.findById(id).orElseThrow();
+    public UserDTO getOne(UUID id) {
+        User user = userRepository.findById(id).orElseThrow();
+        return UserMapper.toDTO(user);
     }
 
-    public User create(User user) {
-        return userRepository.save(user);
+    public UserDTO create(CreateUserDTO user) {
+        User entity = UserMapper.toEntity(user);
+        User newUser = userRepository.save(entity);
+        return UserMapper.toDTO(newUser);
     }
 
-    public User update(UUID id, User user) {
+    public UserDTO update(UUID id, UpdateUserDTO user) {
         User existing = userRepository.findById(id).orElseThrow();
-
-        existing.setUsername(user.getUsername());
-        existing.setEmail(user.getEmail());
-
-        return userRepository.save(existing);
+        UserMapper.updateEntity(existing, user);
+        User saved =  userRepository.save(existing);
+        return UserMapper.toDTO(saved);
     }
 
     public void delete(UUID id) {

@@ -1,5 +1,9 @@
 package inf.unideb.backend.service;
 
+import inf.unideb.backend.dto.BoardDTO;
+import inf.unideb.backend.dto.CreateBoardDTO;
+import inf.unideb.backend.dto.UpdateBoardDTO;
+import inf.unideb.backend.mapper.BoardMapper;
 import inf.unideb.backend.model.Board;
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.BoardRepository;
@@ -24,45 +28,43 @@ public class BoardService {
         this.itemRepository = ir;
     }
 
-    public List<Board> getAll() {
-        return boardRepository.findAll();
+    public List<BoardDTO> getAll() {
+        List<Board> boards = boardRepository.findAll();
+        return boards.stream()
+                .map(BoardMapper::toDTO)
+                .toList();
     }
 
-    public Board getOne(UUID id) {
-        return boardRepository
-                .findById(id)
-                .orElseThrow();
+    public BoardDTO getOne(UUID id) {
+        Board board = boardRepository.findById(id).orElseThrow();
+        return BoardMapper.toDTO(board);
     }
 
-    public Board create(Board board) {
-        return boardRepository.save(board);
+    public BoardDTO create(CreateBoardDTO board) {
+        Board entity = BoardMapper.toEntity(board);
+        Board saved = boardRepository.save(entity);
+        return BoardMapper.toDTO(saved);
     }
 
-    public Board update(UUID id, Board board) {
-        Board existing = boardRepository
-                .findById(id).orElseThrow();
-
-        existing.setName(board.getName());
-        existing.setUser(board.getUser());
-
-        return boardRepository.save(existing);
+    public BoardDTO update(UUID id, UpdateBoardDTO board) {
+        Board existing = boardRepository.findById(id).orElseThrow();
+        BoardMapper.updateEntity(existing, board);
+        Board saved = boardRepository.save(existing);
+        return BoardMapper.toDTO(saved);
     }
 
     public void delete(UUID id) {
         boardRepository.deleteById(id);
     }
 
-    public Board addItem(UUID boardId, UUID itemId) {
-        Board board = boardRepository
-                .findById(boardId)
-                .orElseThrow();
-        Item item = itemRepository
-                .findById(itemId)
-                .orElseThrow();
+    public BoardDTO addItem(UUID boardId, UUID itemId) {
+        Board board = boardRepository.findById(boardId).orElseThrow();
+        Item item = itemRepository.findById(itemId).orElseThrow();
 
         board.getItems().add(item);
-        return boardRepository
-                .save(board);
+        Board saved = boardRepository.save(board);
+
+        return BoardMapper.toDTO(saved);
     }
 
 }
