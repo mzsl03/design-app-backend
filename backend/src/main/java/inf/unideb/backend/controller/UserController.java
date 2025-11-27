@@ -1,6 +1,6 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.auth.RegisterRequestDTO;
 import inf.unideb.backend.dto.UpdateUserDTO;
 import inf.unideb.backend.dto.UserDTO;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public interface UserController {
     UserDTO getOne(@PathVariable UUID id);
 
     @PostMapping("/api/users")
-    UserDTO create(@RequestBody CreateUserDTO user);
+    UserDTO create(@RequestBody RegisterRequestDTO user);
 
     @PutMapping("/api/users/{id}")
     UserDTO update(@PathVariable UUID id, @RequestBody UpdateUserDTO user);

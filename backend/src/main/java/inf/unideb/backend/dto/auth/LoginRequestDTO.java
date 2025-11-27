@@ -1,7 +1,6 @@
 package inf.unideb.backend.dto.auth;
 
-public record RegisterRequestDTO(
+public record LoginRequestDTO(
         String username,
-        String email,
         String password
 ) { }

@@ -1,6 +1,6 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.auth.RegisterRequestDTO;
 import inf.unideb.backend.dto.UpdateUserDTO;
 import inf.unideb.backend.dto.UserDTO;
 import inf.unideb.backend.service.UserService;
@@ -32,7 +32,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public UserDTO create(CreateUserDTO user) {
+    public UserDTO create(RegisterRequestDTO user) {
         return userService.create(user);
     }
 
