@@ -1,7 +1,7 @@
 package inf.unideb.backend.service;
 
 import inf.unideb.backend.dto.*;
-import inf.unideb.backend.mapper.UserMapper;
+import inf.unideb.backend.dto.auth.RegisterRequestDTO;
 import inf.unideb.backend.model.User;
 import inf.unideb.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +25,8 @@ class UserServiceTest {
 
     @Test
     void testGetAll() {
-        User u1 = new User(UUID.randomUUID(), "a", "a@mail");
-        User u2 = new User(UUID.randomUUID(), "b", "b@mail");
+        User u1 = new User(UUID.randomUUID(), "a", "a@mail", "p123");
+        User u2 = new User(UUID.randomUUID(), "b", "b@mail", "p123");
 
         when(userRepository.findAll()).thenReturn(List.of(u1, u2));
 
@@ -40,7 +40,7 @@ class UserServiceTest {
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "john", "j@mail");
+        User user = new User(id, "john", "j@mail", "pw123");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
@@ -52,8 +52,8 @@ class UserServiceTest {
 
     @Test
     void testCreate() {
-        CreateUserDTO dto = new CreateUserDTO("john", "j@mail");
-        User saved = new User(UUID.randomUUID(), "john", "j@mail");
+        RegisterRequestDTO dto = new RegisterRequestDTO("john", "j@mail", "pw123");
+        User saved = new User(UUID.randomUUID(), "john", "j@mail",  "pw123");
 
         when(userRepository.save(any(User.class))).thenReturn(saved);
 
@@ -66,10 +66,10 @@ class UserServiceTest {
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
-        User existing = new User(id, "old", "old@mail");
+        User existing = new User(id, "old", "old@mail",  "pw123");
 
-        UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail");
-        User saved = new User(id, "new", "new@mail");
+        UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail", "pw123");
+        User saved = new User(id, "new", "new@mail", "pw123");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(existing));
         when(userRepository.save(any(User.class))).thenReturn(saved);

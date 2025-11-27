@@ -1,6 +1,6 @@
 package inf.unideb.backend.controller;
 
-import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.auth.RegisterRequestDTO;
 import inf.unideb.backend.dto.UpdateUserDTO;
 import inf.unideb.backend.dto.UserDTO;
 
@@ -54,22 +54,22 @@ class UserControllerImplTest {
 
     @Test
     void testCreate() {
-        CreateUserDTO dto = new CreateUserDTO("user", "email");
+        RegisterRequestDTO dto = new RegisterRequestDTO("user", "email", "pw123");
         UserDTO saved = new UserDTO("user");
 
-        when(userService.create(any(CreateUserDTO.class))).thenReturn(saved);
+        when(userService.create(any(RegisterRequestDTO.class))).thenReturn(saved);
 
         var result = controller.create(dto);
 
         assertEquals("user", result.username());
-        verify(userService).create(any(CreateUserDTO.class));
+        verify(userService).create(any(RegisterRequestDTO.class));
     }
 
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
 
-        UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail.com");
+        UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail.com", "pw123");
         UserDTO saved = new UserDTO("new");
 
         when(userService.update(eq(id), any(UpdateUserDTO.class))).thenReturn(saved);
