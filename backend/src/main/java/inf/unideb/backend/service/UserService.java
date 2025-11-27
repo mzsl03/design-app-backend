@@ -1,6 +1,6 @@
 package inf.unideb.backend.service;
 
-import inf.unideb.backend.dto.CreateUserDTO;
+import inf.unideb.backend.dto.auth.RegisterRequestDTO;
 import inf.unideb.backend.dto.UpdateUserDTO;
 import inf.unideb.backend.dto.UserDTO;
 import inf.unideb.backend.mapper.UserMapper;
@@ -34,7 +34,7 @@ public class UserService {
         return UserMapper.toDTO(user);
     }
 
-    public UserDTO create(CreateUserDTO user) {
+    public UserDTO create(RegisterRequestDTO user) {
         User entity = UserMapper.toEntity(user);
         User newUser = userRepository.save(entity);
         return UserMapper.toDTO(newUser);
