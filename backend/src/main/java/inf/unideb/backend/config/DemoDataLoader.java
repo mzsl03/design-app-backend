@@ -35,20 +35,51 @@ public class DemoDataLoader {
     }
 
     private static final List<String> URLS = Arrays.asList(
-            "https://images.pexels.com/"
-                    + "photos/34144977/pexels-photo-34144977.jpeg",
-            "https://images.pexels.com/"
-                    + "photos/32614530/pexels-photo-32614530.jpeg",
-            "https://images.pexels.com/"
-                    + "photos/34335194/pexels-photo-34335194.jpeg",
-            "https://images.pexels.com/"
-                    + "photos/3408353/pexels-photo-3408353.jpeg",
-            "https://images.pexels.com/"
-                    + "photos/5761962/pexels-photo-5761962.jpeg",
-            "https://images.pexels.com/"
-                    + "photos/34563044/pexels-photo-34563044.jpeg",
-            "https://images.pexels.com/"
-                    + "photos/34678668/pexels-photo-34678668.jpeg"
+            "https://images.unsplash.com/"
+                    + "photo-1761323320291-61869b66f9e9?"
+                    + "w=600&auto=format&"
+                    + "fit=crop&q=60&ixlib=rb-4.1.0&ixid"
+                    + "=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfD"
+                    + "Z8aVVJc25WdGpCMFl8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1753729967894"
+                    + "-cd1ba12f11c1?w=600&auto="
+                    + "format&fit=crop&q="
+                    + "60&ixlib=rb-4.1.0"
+                    + "&ixid=M3wxMjA3fDB8MHx0b3BpYy1m"
+                    + "ZWVkfDh8aVVJc25WdGpCMFl8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1760978631985"
+                    + "-590e3b5f4057?w"
+                    + "=600&auto=format&"
+                    + "fit=crop&q=60&ixlib=rb-4.1.0&ixid"
+                    + "=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDI5fGlVSXNu"
+                    + "VnRqQjBZfHxlbnwwfHx8fHw%3D",
+            "https://images.unsplash.com/"
+                    + "photo-1751315574558-d185d266b16d"
+                    + "?w=600&auto=format&fit"
+                    + "=crop&q=60&ixlib="
+                    + "rb-4.1.0&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVk"
+                    + "fDI3fGlVSXNuVnRqQjBZfHxlbnwwfHx8fHw%3D",
+            "https://images.unsplash.com/"
+                    + "photo-1516041774595-cc1b7969480c"
+                    + "?q=80&w=1170&auto=format&"
+                    + "fit=crop&ixlib="
+                    + "rb-4.1.0&ixid=M3wxMjA"
+                    + "3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA"
+                    + "%3D%3D",
+            "https://images.unsplash.com/"
+                    + "photo-1747767296029-"
+                    + "c5116a707614?q="
+                    + "80&w=1169"
+                    + "&auto=format&fit"
+                    + "=crop&ixlib=rb-"
+                    + "4.1.0&"
+                    + "ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8f"
+                    + "GVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/"
+                    + "photo-1610917423396-689c35842cd1?q"
+                    + "=80&w=1170&auto=format&fit=crop&ixlib=rb-"
+                    + "4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by"
+                    + "1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     );
 
 
