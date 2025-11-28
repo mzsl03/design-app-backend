@@ -10,6 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,12 @@ public class DemoDataLoader {
     private static final int FIFTH = 4;
     private static final int SIXTH = 5;
     private static final int SEVENTH = 6;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public DemoDataLoader(PasswordEncoder pE) {
+        this.passwordEncoder = pE;
+    }
 
     private static final List<String> URLS = Arrays.asList(
             "https://images.pexels.com/"
@@ -59,24 +66,28 @@ public class DemoDataLoader {
                     User.builder()
                             .username("demo_user")
                             .email("demo@example.com")
+                            .password(passwordEncoder.encode("password"))
                             .build()
             );
             var user2 = userRepo.save(
                     User.builder()
                             .username("demo_user2")
                             .email("demo2@example.com")
+                            .password(passwordEncoder.encode("password"))
                             .build()
             );
             var user3 = userRepo.save(
                     User.builder()
                             .username("traveler_dude")
                             .email("traveler@example.com")
+                            .password(passwordEncoder.encode("password"))
                             .build()
             );
             var user4 = userRepo.save(
                     User.builder()
                             .username("nature_lover")
                             .email("lover@example.com")
+                            .password(passwordEncoder.encode("password"))
                             .build()
             );
             var item1 = itemRepo.save(
