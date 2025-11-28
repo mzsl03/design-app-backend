@@ -4,12 +4,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 
 @Service
+@Profile("!test")
 public class JwtService {
 
     private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 óra
@@ -29,13 +32,20 @@ public class JwtService {
         return getClaims(token).getSubject();
     }
 
-    public boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
-            return !getClaims(token)
-                    .getExpiration().before(new Date());
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername())
+                    && !isTokenExpired(token);
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private boolean isTokenExpired(String token) {
+        return getClaims(token)
+                .getExpiration()
+                .before(new Date());
     }
 
     private Claims getClaims(String token) {
