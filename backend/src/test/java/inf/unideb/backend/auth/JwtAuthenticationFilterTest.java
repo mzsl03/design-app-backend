@@ -34,6 +34,8 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain chain = mock(FilterChain.class);
 
+        when(request.getServletPath()).thenReturn("/api/boards");
+
         when(request.getHeader("Authorization")).thenReturn(null);
 
         filter.doFilter(request, response, chain);
@@ -46,6 +48,8 @@ class JwtAuthenticationFilterTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain chain = mock(FilterChain.class);
+
+        when(request.getServletPath()).thenReturn("/api/boards");
 
         when(request.getHeader("Authorization"))
                 .thenReturn("Bearer TOKEN123");
@@ -81,6 +85,8 @@ class JwtAuthenticationFilterTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain chain = mock(FilterChain.class);
+
+        when(request.getServletPath()).thenReturn("/api/boards");
 
         when(request.getHeader("Authorization"))
                 .thenReturn("Bearer BADTOKEN");
