@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@Profile("!test")
+@Profile("prod")
 public class DemoDataLoader {
 
     private static final int FIRST = 0;
@@ -93,6 +93,12 @@ public class DemoDataLoader {
             if (userRepo.count() > 0) {
                 return;
             }
+            var admin = userRepo.save(
+                    User.builder()
+                            .username("admin").email("admin@example.com")
+                            .password(passwordEncoder.encode("admin123"))
+                            .role("ADMIN").build()
+            );
             var user1 = userRepo.save(
                     User.builder()
                             .username("demo_user")
