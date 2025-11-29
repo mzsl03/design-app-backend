@@ -28,8 +28,8 @@ class ItemControllerImplTest {
 
     @Test
     void testGetAll() {
-        ItemDTO item1 = new ItemDTO("A", "img", "desc", "tag", new UserDTO("username1"));
-        ItemDTO item2 = new ItemDTO("B", "img2", "desc2", "tag2", new UserDTO("username2"));
+        ItemDTO item1 = new ItemDTO(UUID.randomUUID(), "A", "img", "desc", "tag", new UserDTO(UUID.randomUUID(),"username1"));
+        ItemDTO item2 = new ItemDTO(UUID.randomUUID(), "B","img2", "desc2", "tag2", new UserDTO(UUID.randomUUID(),"username2"));
 
         when(itemService.getAll()).thenReturn(Arrays.asList(item1, item2));
 
@@ -43,7 +43,7 @@ class ItemControllerImplTest {
     void testGetOne() {
         UUID id = UUID.randomUUID();
 
-        ItemDTO item = new ItemDTO("A", "img", "desc", "tag", new UserDTO("username"));
+        ItemDTO item = new ItemDTO(id,"A", "img", "desc", "tag", new UserDTO(UUID.randomUUID(), "username"));
 
         when(itemService.getOne(id)).thenReturn(item);
 
@@ -56,7 +56,7 @@ class ItemControllerImplTest {
     @Test
     void testCreate() {
         CreateItemDTO dto = new CreateItemDTO("A", "img", "desc", "tag");
-        ItemDTO saved = new ItemDTO("A", "img", "desc", "tag", new UserDTO("username"));
+        ItemDTO saved = new ItemDTO(UUID.randomUUID(),"A", "img", "desc", "tag", new UserDTO(UUID.randomUUID(),"username"));
 
         when(itemService.create(any(CreateItemDTO.class))).thenReturn(saved);
 
@@ -71,7 +71,7 @@ class ItemControllerImplTest {
         UUID id = UUID.randomUUID();
 
         UpdateItemDTO dto = new UpdateItemDTO("New", "NewImg", "NewDesc", "NewTag");
-        ItemDTO saved = new ItemDTO("New", "NewImg", "NewDesc", "NewTag", new UserDTO("user"));
+        ItemDTO saved = new ItemDTO(id, "New", "NewImg", "NewDesc", "NewTag", new UserDTO(UUID.randomUUID(),"user"));
 
         when(itemService.update(eq(id), any(UpdateItemDTO.class))).thenReturn(saved);
 

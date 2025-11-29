@@ -27,8 +27,8 @@ class UserControllerImplTest {
 
     @Test
     void testGetAll() {
-        UserDTO u1 = new UserDTO("user1");
-        UserDTO u2 = new UserDTO("user2");
+        UserDTO u1 = new UserDTO(UUID.randomUUID(), "user1");
+        UserDTO u2 = new UserDTO(UUID.randomUUID(), "user2");
 
         when(userService.getAll()).thenReturn(Arrays.asList(u1, u2));
 
@@ -42,7 +42,7 @@ class UserControllerImplTest {
     void testGetOne() {
         UUID id = UUID.randomUUID();
 
-        UserDTO user = new UserDTO("user");
+        UserDTO user = new UserDTO(id,"user");
 
         when(userService.getOne(id)).thenReturn(user);
 
@@ -55,7 +55,7 @@ class UserControllerImplTest {
     @Test
     void testCreate() {
         RegisterRequestDTO dto = new RegisterRequestDTO("user", "email", "pw123");
-        UserDTO saved = new UserDTO("user");
+        UserDTO saved = new UserDTO(UUID.randomUUID(), "user");
 
         when(userService.create(any(RegisterRequestDTO.class))).thenReturn(saved);
 
@@ -70,7 +70,7 @@ class UserControllerImplTest {
         UUID id = UUID.randomUUID();
 
         UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail.com", "pw123");
-        UserDTO saved = new UserDTO("new");
+        UserDTO saved = new UserDTO(id,"new");
 
         when(userService.update(eq(id), any(UpdateUserDTO.class))).thenReturn(saved);
 
