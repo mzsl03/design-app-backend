@@ -1,10 +1,11 @@
 package inf.unideb.backend.auth;
 
-
 import inf.unideb.backend.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,8 @@ class JwtServiceTest {
                 .roles("USER")
                 .build();
 
-        String token = jwtService.generateToken(user.getUsername());
+        UUID userId = UUID.randomUUID();
+        String token = jwtService.generateToken(user.getUsername(), "USER", userId);
 
         assertNotNull(token);
         assertFalse(token.isEmpty());
@@ -42,7 +44,8 @@ class JwtServiceTest {
                 .roles("USER")
                 .build();
 
-        String token = jwtService.generateToken(user.getUsername());
+        UUID userId = UUID.randomUUID();
+        String token = jwtService.generateToken(user.getUsername(), "USER", userId);
 
         assertTrue(jwtService.isTokenValid(token, user));
     }
@@ -63,7 +66,8 @@ class JwtServiceTest {
                 .roles("USER")
                 .build();
 
-        String token = jwtService.generateToken(user1.getUsername());
+        UUID userId = UUID.randomUUID();
+        String token = jwtService.generateToken(user1.getUsername(), "USER", userId);
 
         assertFalse(jwtService.isTokenValid(token, user2));
     }

@@ -25,8 +25,8 @@ class UserServiceTest {
 
     @Test
     void testGetAll() {
-        User u1 = new User(UUID.randomUUID(), "a", "a@mail", "p123");
-        User u2 = new User(UUID.randomUUID(), "b", "b@mail", "p123");
+        User u1 = new User(UUID.randomUUID(), "a", "a@mail", "p123", "USER");
+        User u2 = new User(UUID.randomUUID(), "b", "b@mail", "p123","USER");
 
         when(userRepository.findAll()).thenReturn(List.of(u1, u2));
 
@@ -40,7 +40,7 @@ class UserServiceTest {
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "john", "j@mail", "pw123");
+        User user = new User(id, "john", "j@mail", "pw123", "USER");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
@@ -53,7 +53,7 @@ class UserServiceTest {
     @Test
     void testCreate() {
         RegisterRequestDTO dto = new RegisterRequestDTO("john", "j@mail", "pw123");
-        User saved = new User(UUID.randomUUID(), "john", "j@mail",  "pw123");
+        User saved = new User(UUID.randomUUID(), "john", "j@mail",  "pw123", "USER");
 
         when(userRepository.save(any(User.class))).thenReturn(saved);
 
@@ -66,10 +66,10 @@ class UserServiceTest {
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
-        User existing = new User(id, "old", "old@mail",  "pw123");
+        User existing = new User(id, "old", "old@mail",  "pw123", "USER");
 
         UpdateUserDTO dto = new UpdateUserDTO("new", "new@mail", "pw123");
-        User saved = new User(id, "new", "new@mail", "pw123");
+        User saved = new User(id, "new", "new@mail", "pw123", "USER");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(existing));
         when(userRepository.save(any(User.class))).thenReturn(saved);
