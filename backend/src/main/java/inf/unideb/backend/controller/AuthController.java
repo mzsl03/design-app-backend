@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-@Profile("!test")
+@Profile("prod")
 public class AuthController {
 
     private final AuthenticationManager authManager;
@@ -46,10 +46,15 @@ public class AuthController {
         user.setUsername(dto.username());
         user.setEmail(dto.email());
         user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setRole("USER");
 
         userRepository.save(user);
 
-        String token = jwtService.generateToken(dto.username());
+        String token = jwtService.generateToken(
+                dto.username(),
+                user.getRole(),
+                user.getId()
+        );
         return new AuthResponseDTO(token);
     }
 
@@ -62,8 +67,15 @@ public class AuthController {
                         dto.password()
                 )
         );
+        User user = userRepository.findByUsername(dto.username())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String token = jwtService.generateToken(dto.username());
+        String token = jwtService.generateToken(
+                user.getUsername(),
+                user.getRole(),
+                user.getId()
+        );
+
         return new AuthResponseDTO(token);
     }
 }

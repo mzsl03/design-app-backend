@@ -3,6 +3,7 @@ package inf.unideb.backend.controller;
 import inf.unideb.backend.dto.BoardDTO;
 import inf.unideb.backend.dto.CreateBoardDTO;
 import inf.unideb.backend.dto.UpdateBoardDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public interface BoardController {
     @DeleteMapping("/api/boards/{id}")
     void delete(@PathVariable UUID id);
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/api/boards/{boardId}/addItem/{itemId}")
     BoardDTO addItem(@PathVariable UUID boardId, @PathVariable UUID itemId);
 }

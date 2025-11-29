@@ -3,6 +3,7 @@ package inf.unideb.backend.controller;
 import inf.unideb.backend.dto.auth.RegisterRequestDTO;
 import inf.unideb.backend.dto.UpdateUserDTO;
 import inf.unideb.backend.dto.UserDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public interface UserController {
     @PutMapping("/api/users/{id}")
     UserDTO update(@PathVariable UUID id, @RequestBody UpdateUserDTO user);
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/api/users/{id}")
     void delete(@PathVariable UUID id);
 

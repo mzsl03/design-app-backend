@@ -3,6 +3,7 @@ package inf.unideb.backend.controller;
 import inf.unideb.backend.dto.CreateItemDTO;
 import inf.unideb.backend.dto.ItemDTO;
 import inf.unideb.backend.dto.UpdateItemDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public interface ItemController {
     @PutMapping("/api/items/{id}")
     ItemDTO update(@PathVariable UUID id, @RequestBody UpdateItemDTO item);
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/api/items/{id}")
     void delete(@PathVariable UUID id);
 }
