@@ -13,6 +13,7 @@ public class ItemMapper {
         }
 
         return new ItemDTO(
+                item.getId(),
                 item.getTitle(),
                 item.getImageUrl(),
                 item.getDescription(),

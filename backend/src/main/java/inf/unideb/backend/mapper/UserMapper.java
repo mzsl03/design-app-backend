@@ -11,7 +11,10 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-        return new UserDTO(user.getUsername());
+        return new UserDTO(
+                user.getId(),
+                user.getUsername()
+        );
     }
 
     public static User toEntity(RegisterRequestDTO dto) {

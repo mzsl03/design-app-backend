@@ -13,6 +13,7 @@ public class BoardMapper {
         }
 
         return new BoardDTO(
+                board.getId(),
                 board.getName(),
                 UserMapper.toDTO(board.getUser()),
                 board.getItems()
