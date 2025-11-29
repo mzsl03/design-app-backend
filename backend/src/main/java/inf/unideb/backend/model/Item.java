@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.UUID;
 
@@ -34,5 +36,6 @@ public class Item {
     private String description;
     private String tags;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }
