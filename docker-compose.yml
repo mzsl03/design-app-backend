@@ -22,6 +22,7 @@ services:
     depends_on:
       - postgres
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/designdb
       SPRING_DATASOURCE_USERNAME: designuser
       SPRING_DATASOURCE_PASSWORD: designpass
