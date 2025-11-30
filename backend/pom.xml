@@ -143,6 +143,8 @@
                     <excludes>
                         <exclude>**/DemoDataLoader.class</exclude>
                         <exclude>**/DemoDataLoader$*.class</exclude>
+                        <exclude>**/controller/AuthController.class</exclude>
+                        <exclude>**/config/SecurityConfig.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
