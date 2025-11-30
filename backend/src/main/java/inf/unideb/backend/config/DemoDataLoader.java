@@ -1,8 +1,10 @@
 package inf.unideb.backend.config;
 
 import inf.unideb.backend.model.Board;
+import inf.unideb.backend.model.BoardItem;
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.model.User;
+import inf.unideb.backend.repository.BoardItemRepository;
 import inf.unideb.backend.repository.BoardRepository;
 import inf.unideb.backend.repository.ItemRepository;
 import inf.unideb.backend.repository.UserRepository;
@@ -12,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,7 +88,8 @@ public class DemoDataLoader {
     ApplicationRunner initData(
             UserRepository userRepo,
             ItemRepository itemRepo,
-            BoardRepository boardRepo
+            BoardRepository boardRepo,
+            BoardItemRepository boardItemRepo
     ) {
         return args -> {
             if (userRepo.count() > 0) {
@@ -97,36 +99,31 @@ public class DemoDataLoader {
                     User.builder()
                             .username("admin").email("admin@example.com")
                             .password(passwordEncoder.encode("admin123"))
-                            .role("ADMIN").build()
-            );
+                            .role("ADMIN").build());
             var user1 = userRepo.save(
                     User.builder()
                             .username("demo_user")
                             .email("demo@example.com")
                             .password(passwordEncoder.encode("password"))
-                            .build()
-            );
+                            .build());
             var user2 = userRepo.save(
                     User.builder()
                             .username("demo_user2")
                             .email("demo2@example.com")
                             .password(passwordEncoder.encode("password"))
-                            .build()
-            );
+                            .build());
             var user3 = userRepo.save(
                     User.builder()
                             .username("traveler_dude")
                             .email("traveler@example.com")
                             .password(passwordEncoder.encode("password"))
-                            .build()
-            );
+                            .build());
             var user4 = userRepo.save(
                     User.builder()
                             .username("nature_lover")
                             .email("lover@example.com")
                             .password(passwordEncoder.encode("password"))
-                            .build()
-            );
+                            .build());
             var item1 = itemRepo.save(
                     Item.builder()
                             .title("Valley greenery")
@@ -135,9 +132,7 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(FIRST))
                             .tags("mountains,snow,alps")
-                            .user(user1)
-                            .build()
-            );
+                            .user(user1).build());
             var item2 = itemRepo.save(
                     Item.builder()
                             .title("Lunch in Paris")
@@ -147,9 +142,7 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(SECOND))
                             .tags("coffee,croissant")
-                            .user(user2)
-                            .build()
-            );
+                            .user(user2).build());
             var item3 = itemRepo.save(
                     Item.builder()
                             .title("Houses in the woods")
@@ -159,9 +152,7 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(THIRD))
                             .tags("forest,cabins,trail")
-                            .user(user1)
-                            .build()
-            );
+                            .user(user1).build());
             var item4 = itemRepo.save(
                     Item.builder()
                             .title("Mount Fuji")
@@ -170,9 +161,7 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(FOURTH))
                             .tags("mountain,Fuji,Japan")
-                            .user(user3)
-                            .build()
-            );
+                            .user(user3).build());
             var item5 = itemRepo.save(
                     Item.builder()
                             .title("Street market")
@@ -181,9 +170,7 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(FIFTH))
                             .tags("street,Japan")
-                            .user(user3)
-                            .build()
-            );
+                            .user(user3).build());
             var item6 = itemRepo.save(
                     Item.builder()
                             .title("Allay")
@@ -192,9 +179,7 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(SIXTH))
                             .tags("old,street,pretty")
-                            .user(user4)
-                            .build()
-            );
+                            .user(user4).build());
             var item7 = itemRepo.save(
                     Item.builder()
                             .title("Middle of nowhere")
@@ -203,39 +188,41 @@ public class DemoDataLoader {
                             )
                             .imageUrl(URLS.get(SEVENTH))
                             .tags("airy,trail")
-                            .user(user4)
-                            .build()
-            );
+                            .user(user4).build());
             var board1 = Board.builder()
                     .name("Austrian vacation")
-                    .user(user1)
-                    .items(new ArrayList<>(List.of(item1, item3)))
-                    .build();
+                    .user(user1).build();
             var board2 = Board.builder()
                     .name("Paris Vibes")
-                    .user(user2)
-                    .items(new ArrayList<>(List.of(item2)))
-                    .build();
+                    .user(user2).build();
             var board3 = Board.builder()
                     .name("Japan")
-                    .user(user3)
-                    .items(new ArrayList<>(List.of(item4)))
-                    .build();
+                    .user(user3).build();
             var board4 = Board.builder()
                     .name("City life")
-                    .user(user3)
-                    .items(new ArrayList<>(List.of(item5)))
-                    .build();
+                    .user(user3).build();
             var board5 = Board.builder()
                     .name("Nature photography")
-                    .user(user4)
-                    .items(new ArrayList<>(List.of(item6, item7)))
-                    .build();
+                    .user(user4).build();
             boardRepo.save(board1);
             boardRepo.save(board2);
             boardRepo.save(board3);
             boardRepo.save(board4);
             boardRepo.save(board5);
+            boardItemRepo.save(BoardItem.builder().board(board1)
+                    .item(item1).build());
+            boardItemRepo.save(BoardItem.builder().board(board1)
+                    .item(item3).build());
+            boardItemRepo.save(BoardItem.builder().board(board2)
+                    .item(item2).build());
+            boardItemRepo.save(BoardItem.builder().board(board3)
+                    .item(item4).build());
+            boardItemRepo.save(BoardItem.builder().board(board3)
+                    .item(item5).build());
+            boardItemRepo.save(BoardItem.builder().board(board4)
+                    .item(item6).build());
+            boardItemRepo.save(BoardItem.builder().board(board5)
+                    .item(item7).build());
         };
     }
 }
