@@ -1,113 +1,116 @@
 package inf.unideb.backend.controller;
 
+import inf.unideb.backend.dto.BoardDTO;
 import inf.unideb.backend.dto.CreateBoardDTO;
 import inf.unideb.backend.dto.UpdateBoardDTO;
-import inf.unideb.backend.model.Board;
-import inf.unideb.backend.model.Item;
-import inf.unideb.backend.repository.BoardRepository;
-import inf.unideb.backend.repository.ItemRepository;
+import inf.unideb.backend.dto.UserDTO;
+import inf.unideb.backend.dto.ItemDTO;
 import inf.unideb.backend.service.BoardService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardControllerImplTest {
 
-    private BoardRepository boardRepository;
-    private ItemRepository itemRepository;
     private BoardService boardService;
+    private BoardControllerImpl controller;
 
     @BeforeEach
     void setUp() {
-        boardRepository = mock(BoardRepository.class);
-        itemRepository = mock(ItemRepository.class);
-        boardService = new BoardService(boardRepository, itemRepository);
+        boardService = mock(BoardService.class);
+        controller = new BoardControllerImpl(boardService);
     }
 
     @Test
     void testGetAll() {
-        Board b1 = new Board();
-        b1.setId(UUID.randomUUID());
-        b1.setName("Designs");
+        List<BoardDTO> expected = List.of(
+                new BoardDTO(
+                        UUID.randomUUID(),
+                        "Board1",
+                        new UserDTO(UUID.randomUUID(), "john"),
+                        List.of()
+                )
+        );
 
-        Board b2 = new Board();
-        b2.setId(UUID.randomUUID());
-        b2.setName("Clothes");
+        when(boardService.getAll()).thenReturn(expected);
 
-        when(boardRepository.findAll()).thenReturn(List.of(b1, b2));
+        List<BoardDTO> result = controller.getAll();
 
-        var result = boardService.getAll();
-
-        assertEquals(2, result.size());
-        assertEquals("Designs", result.get(0).name());
+        verify(boardService).getAll();
+        assertEquals(expected, result);
     }
 
     @Test
     void testGetOne() {
         UUID id = UUID.randomUUID();
-        Board b = new Board();
-        b.setId(id);
-        b.setName("Board1");
 
-        when(boardRepository.findById(id)).thenReturn(Optional.of(b));
+        BoardDTO expected = new BoardDTO(
+                id,
+                "Board1",
+                new UserDTO(UUID.randomUUID(), "john"),
+                List.of()
+        );
 
-        var result = boardService.getOne(id);
-        assertEquals("Board1", result.name());
+        when(boardService.getOne(id)).thenReturn(expected);
+
+        BoardDTO result = controller.getOne(id);
+
+        verify(boardService).getOne(id);
+        assertEquals(expected, result);
     }
 
     @Test
     void testCreate() {
-        CreateBoardDTO dto = new CreateBoardDTO("MyBoard");
+        CreateBoardDTO dto = new CreateBoardDTO("NewBoard");
 
-        Board saved = new Board();
-        saved.setId(UUID.randomUUID());
-        saved.setName("MyBoard");
+        BoardDTO expected = new BoardDTO(
+                UUID.randomUUID(),
+                "NewBoard",
+                new UserDTO(UUID.randomUUID(), "john"),
+                List.of()
+        );
 
-        when(boardRepository.save(any(Board.class))).thenReturn(saved);
+        when(boardService.create(dto)).thenReturn(expected);
 
-        var result = boardService.create(dto);
-        assertEquals("MyBoard", result.name());
+        BoardDTO result = controller.create(dto);
+
+        verify(boardService).create(dto);
+        assertEquals(expected, result);
     }
 
     @Test
     void testUpdate() {
         UUID id = UUID.randomUUID();
+        UpdateBoardDTO dto = new UpdateBoardDTO("UpdatedBoard");
 
-        Board existing = new Board();
-        existing.setId(id);
-        existing.setName("Old");
+        BoardDTO expected = new BoardDTO(
+                id,
+                "UpdatedBoard",
+                new UserDTO(UUID.randomUUID(), "john"),
+                List.of()
+        );
 
-        UpdateBoardDTO dto = new UpdateBoardDTO("New");
+        when(boardService.update(id, dto)).thenReturn(expected);
 
-        Board saved = new Board();
-        saved.setId(id);
-        saved.setName("New");
+        BoardDTO result = controller.update(id, dto);
 
-        when(boardRepository.findById(id)).thenReturn(Optional.of(existing));
-        when(boardRepository.save(existing)).thenReturn(saved);
-
-        var result = boardService.update(id, dto);
-        assertEquals("New", result.name());
+        verify(boardService).update(id, dto);
+        assertEquals(expected, result);
     }
 
     @Test
     void testDelete() {
         UUID id = UUID.randomUUID();
 
-        Board existing = new Board();
-        existing.setId(id);
-        existing.setName("X");
+        controller.delete(id);
 
-        when(boardRepository.findById(id)).thenReturn(Optional.of(existing));
-        doNothing().when(boardRepository).delete(existing);
-
-        boardService.delete(id);
-
-        verify(boardRepository).delete(existing);
+        verify(boardService).delete(id);
     }
 
     @Test
@@ -115,18 +118,18 @@ class BoardControllerImplTest {
         UUID boardId = UUID.randomUUID();
         UUID itemId = UUID.randomUUID();
 
-        Board board = new Board();
-        board.setId(boardId);
-        board.setName("Test");
+        BoardDTO expected = new BoardDTO(
+                boardId,
+                "BoardX",
+                new UserDTO(UUID.randomUUID(), "john"),
+                List.of(new ItemDTO(itemId, "ItemA", "desc", null, null, new UserDTO(UUID.randomUUID(), "john")))
+        );
 
-        Item item = new Item(itemId, "ItemA", null, null, null, null);
+        when(boardService.addItem(boardId, itemId)).thenReturn(expected);
 
-        when(boardRepository.findById(boardId)).thenReturn(Optional.of(board));
-        when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
-        when(boardRepository.save(any(Board.class))).thenReturn(board);
+        BoardDTO result = controller.addItem(boardId, itemId);
 
-        var result = boardService.addItem(boardId, itemId);
-
-        assertEquals("Test", result.name());
+        verify(boardService).addItem(boardId, itemId);
+        assertEquals(expected, result);
     }
 }
