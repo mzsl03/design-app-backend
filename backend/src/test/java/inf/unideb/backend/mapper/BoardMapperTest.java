@@ -1,10 +1,9 @@
 package inf.unideb.backend.mapper;
 
 import inf.unideb.backend.dto.*;
-import inf.unideb.backend.model.*;
+import inf.unideb.backend.model.Board;
+import inf.unideb.backend.model.User;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,20 +14,14 @@ class BoardMapperTest {
         User user = new User();
         user.setUsername("john");
 
-        Item item = new Item();
-        item.setTitle("Item A");
-        item.setUser(user);
-
         Board board = new Board();
         board.setName("MyBoard");
         board.setUser(user);
-        board.setItems(List.of(item));
 
         BoardDTO dto = BoardMapper.toDTO(board);
 
         assertEquals("MyBoard", dto.name());
         assertEquals("john", dto.user().username());
-        assertEquals("Item A", dto.items().get(0).title());
     }
 
     @Test
@@ -38,7 +31,6 @@ class BoardMapperTest {
         Board entity = BoardMapper.toEntity(dto);
 
         assertEquals("MyBoard", entity.getName());
-        assertTrue(entity.getItems().isEmpty());
     }
 
     @Test

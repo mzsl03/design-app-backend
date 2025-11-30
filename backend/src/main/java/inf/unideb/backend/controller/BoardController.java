@@ -26,7 +26,7 @@ public interface BoardController {
 
     @PutMapping("/api/boards/{id}")
     BoardDTO update(@PathVariable UUID id, @RequestBody UpdateBoardDTO board);
-    
+
     @DeleteMapping("/api/boards/{id}")
     void delete(@PathVariable UUID id);
 

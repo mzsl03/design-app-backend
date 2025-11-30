@@ -106,10 +106,17 @@ class BoardServiceTest {
     void testDelete() {
         UUID id = UUID.randomUUID();
 
-        doNothing().when(boardRepository).deleteById(id);
+        Board existing = new Board(id, "X", null, new ArrayList<>());
+
+        when(boardRepository.findById(id)).thenReturn(Optional.of(existing));
+        when(boardRepository.save(existing)).thenReturn(existing);
+        doNothing().when(boardRepository).delete(existing);
 
         service.delete(id);
 
-        verify(boardRepository).deleteById(id);
+        verify(boardRepository).findById(id);
+        verify(boardRepository).save(existing);   // mert clear + save
+        verify(boardRepository).delete(existing); // végső törlés
     }
+
 }
