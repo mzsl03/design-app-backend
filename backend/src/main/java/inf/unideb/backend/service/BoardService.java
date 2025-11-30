@@ -5,9 +5,11 @@ import inf.unideb.backend.dto.CreateBoardDTO;
 import inf.unideb.backend.dto.UpdateBoardDTO;
 import inf.unideb.backend.mapper.BoardMapper;
 import inf.unideb.backend.model.Board;
+import inf.unideb.backend.model.BoardItem;
 import inf.unideb.backend.model.Item;
 import inf.unideb.backend.repository.BoardRepository;
 import inf.unideb.backend.repository.ItemRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,18 +55,35 @@ public class BoardService {
         return BoardMapper.toDTO(saved);
     }
 
+
+    @Transactional
     public void delete(UUID id) {
-        boardRepository.deleteById(id);
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+
+        if (board.getBoardItems() != null) {
+            board.getBoardItems().clear();
+            boardRepository.save(board);
+        }
+
+        boardRepository.delete(board);
     }
 
+
+    @Transactional
     public BoardDTO addItem(UUID boardId, UUID itemId) {
         Board board = boardRepository.findById(boardId).orElseThrow();
         Item item = itemRepository.findById(itemId).orElseThrow();
 
-        board.getItems().add(item);
-        Board saved = boardRepository.save(board);
+        BoardItem bi = BoardItem.builder()
+                .board(board)
+                .item(item)
+                .build();
 
-        return BoardMapper.toDTO(saved);
+        board.getBoardItems().add(bi);
+
+        boardRepository.save(board);
+        return BoardMapper.toDTO(board);
     }
 
 }
