@@ -4,7 +4,6 @@ import inf.unideb.backend.dto.BoardDTO;
 import inf.unideb.backend.dto.CreateBoardDTO;
 import inf.unideb.backend.dto.UpdateBoardDTO;
 import inf.unideb.backend.service.BoardService;
-import inf.unideb.backend.service.ItemService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +14,10 @@ import java.util.UUID;
 public class BoardControllerImpl implements BoardController {
 
     private final BoardService boardService;
-    private final ItemService itemService;
 
-    public BoardControllerImpl(BoardService br,
-                               ItemService ir) {
+
+    public BoardControllerImpl(BoardService br) {
         this.boardService = br;
-        this.itemService = ir;
     }
 
     @Override
