@@ -5,6 +5,7 @@ import inf.unideb.backend.dto.CreateBoardDTO;
 import inf.unideb.backend.dto.UpdateBoardDTO;
 import inf.unideb.backend.service.BoardService;
 import inf.unideb.backend.service.ItemService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(UUID id) {
         boardService.delete(id);
     }

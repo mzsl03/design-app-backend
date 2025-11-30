@@ -4,6 +4,7 @@ import inf.unideb.backend.dto.BoardDTO;
 import inf.unideb.backend.dto.CreateBoardDTO;
 import inf.unideb.backend.dto.UpdateBoardDTO;
 import inf.unideb.backend.model.Board;
+import inf.unideb.backend.model.BoardItem;
 
 public class BoardMapper {
 
@@ -16,8 +17,8 @@ public class BoardMapper {
                 board.getId(),
                 board.getName(),
                 UserMapper.toDTO(board.getUser()),
-                board.getItems()
-                        .stream()
+                board.getBoardItems().stream()
+                        .map(BoardItem::getItem)
                         .map(ItemMapper::toDTO)
                         .toList()
         );
